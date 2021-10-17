@@ -1,9 +1,11 @@
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
+import 'package:flame/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:pacman/components/tile_map.dart';
 
-class PacMan extends BaseGame {
+class PacMan extends BaseGame
+    with VerticalDragDetector, HorizontalDragDetector {
   Size screenSize;
   final gameColumns = 15;
   final gameRows = 11;
@@ -49,5 +51,25 @@ class PacMan extends BaseGame {
     Size mazeSize = Size(mazeWidth, mazeHeight);
 
     super.resize(mazeSize);
+  }
+
+  @override
+  void onVerticalDragEnd(DragEndDetails details) {
+    double velocity = details.primaryVelocity;
+    if (velocity < 0) {
+      _tileMap.managePlayerMovement('DOWN');
+    } else {
+      _tileMap.managePlayerMovement('UP');
+    }
+  }
+
+  @override
+  void onHorizontalDragEnd(DragEndDetails details) {
+    double velocity = details.primaryVelocity;
+    if (velocity < 0) {
+      _tileMap.managePlayerMovement('LEFT');
+    } else {
+      _tileMap.managePlayerMovement('RIGHT');
+    }
   }
 }

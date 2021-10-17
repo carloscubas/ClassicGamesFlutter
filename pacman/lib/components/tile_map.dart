@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/components/component.dart';
+import 'package:pacman/components/player.dart';
 
 import '../pacman.dart';
 import 'wall.dart';
@@ -40,9 +41,11 @@ class TileMap extends Component {
 
   TileMap(this.game) {
     _init();
+    _addPlayer();
   }
 
   final PacMan game;
+  Player _player;
 
   void _init() {
     var gameMap = Map<Point, Component>();
@@ -62,15 +65,57 @@ class TileMap extends Component {
     this._map = gameMap;
   }
 
+  void _addPlayer() {
+    if (_map.isNotEmpty) {
+      _player = Player(game);
+    }
+  }
+
   @override
   void render(Canvas c) {
     _map.forEach((position, component) {
       component.render(c);
     });
+
+    _player.render(c);
   }
 
   @override
   void update(double t) {
-    // TODO: implement update
+    _player.update(t);
+  }
+
+  void managePlayerMovement(String direction) {
+    switch (direction) {
+      case "LEFT":
+        _movePlayer(-1.0, 0.0);
+        break;
+      case "RIGHT":
+        _movePlayer(1.0, 0.0);
+        break;
+      case "UP":
+        _movePlayer(0.0, 1.0);
+        break;
+      case "DOWN":
+        _movePlayer(0.0, -1.0);
+        break;
+    }
+  }
+
+  void _movePlayer(double offsetX, double offsetY) {
+    if (_player.position == null) {
+      return;
+    }
+
+    Point targetPoint = Point(
+      (_player.position.x + offsetX),
+      (_player.position.y + offsetY),
+    );
+
+    if (_map[targetPoint] is Wall) {
+      return;
+    }
+
+    _player.targetLocation = targetPoint;
   }
 }
