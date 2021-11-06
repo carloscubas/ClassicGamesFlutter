@@ -24,6 +24,7 @@ class Imagens {
 
 class TileMap extends Component {
   Map<Point, Component> _map;
+  List<Dots> _dots = <Dots>[];
   List<List<int>> _mapDefinition = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -67,8 +68,9 @@ class TileMap extends Component {
                 Wall(Imagens.wallsMap[WALL], game, posX, posY);
             break;
           case DOT:
-            gameMap[Point(x, y)] =
-                Dots(Imagens.wallsMap[DOT], game, posX, posY);
+            var dot = Dots(Imagens.wallsMap[DOT], game, posX, posY);
+            _dots.add(dot);
+            gameMap[Point(x, y)] = dot;
             break;
         }
       }
@@ -94,6 +96,12 @@ class TileMap extends Component {
   @override
   void update(double t) {
     player.update(t);
+
+    if (_dots.length > 0) {
+      _dots.forEach((_dot) {
+        _dot.update(t);
+      });
+    }
   }
 
   void managePlayerMovement(String direction) {

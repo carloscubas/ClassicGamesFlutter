@@ -5,7 +5,7 @@ import 'package:flame/sprite.dart';
 
 import '../pacman.dart';
 
-class Dots extends SpriteComponent {
+class Dots extends Component {
   final PacMan game;
   Sprite sprite;
   Rect dotsRect;
@@ -24,7 +24,6 @@ class Dots extends SpriteComponent {
 
   @override
   void update(double t) {
-    print('passei aqui');
     if (game.tileMap.player.toRect().contains(this.rect.bottomCenter) ||
         game.tileMap.player.toRect().contains(this.rect.bottomLeft) ||
         game.tileMap.player.toRect().contains(this.rect.bottomRight) ||
@@ -33,6 +32,5 @@ class Dots extends SpriteComponent {
         game.tileMap.player.toRect().contains(this.rect.topRight)) {
       print('colidiu');
     }
-    super.update(t);
   }
 }
