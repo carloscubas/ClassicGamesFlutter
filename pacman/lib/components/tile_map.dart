@@ -5,6 +5,7 @@ import 'package:flame/components/component.dart';
 import 'package:pacman/components/player.dart';
 
 import '../pacman.dart';
+import 'dots.dart';
 import 'wall.dart';
 
 const DOT = 0;
@@ -23,7 +24,7 @@ class Imagens {
 
 class TileMap extends Component {
   Map<Point, Component> _map;
-    List<List<int>> _mapDefinition = [
+  List<List<int>> _mapDefinition = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1],
@@ -35,7 +36,7 @@ class TileMap extends Component {
     [1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1],
     [1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0],
     [1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1],
-    [1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 2, 1],
+    [1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1],
     [1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1],
     [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
     [1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1],
@@ -51,7 +52,7 @@ class TileMap extends Component {
   }
 
   final PacMan game;
-  Player _player;
+  Player player;
 
   void _init() {
     var gameMap = Map<Point, Component>();
@@ -65,6 +66,10 @@ class TileMap extends Component {
             gameMap[Point(x, y)] =
                 Wall(Imagens.wallsMap[WALL], game, posX, posY);
             break;
+          case DOT:
+            gameMap[Point(x, y)] =
+                Dots(Imagens.wallsMap[DOT], game, posX, posY);
+            break;
         }
       }
     }
@@ -73,7 +78,7 @@ class TileMap extends Component {
 
   void _addPlayer() {
     if (_map.isNotEmpty) {
-      _player = Player(game);
+      player = Player(game);
     }
   }
 
@@ -83,12 +88,12 @@ class TileMap extends Component {
       component.render(c);
     });
 
-    _player.render(c);
+    player.render(c);
   }
 
   @override
   void update(double t) {
-    _player.update(t);
+    player.update(t);
   }
 
   void managePlayerMovement(String direction) {
@@ -109,19 +114,19 @@ class TileMap extends Component {
   }
 
   void _movePlayer(double offsetX, double offsetY) {
-    if (_player.position == null) {
+    if (player.position == null) {
       return;
     }
 
     Point targetPoint = Point(
-      (_player.position.x + offsetX),
-      (_player.position.y + offsetY),
+      (player.position.x + offsetX),
+      (player.position.y + offsetY),
     );
 
     if (_map[targetPoint] is Wall) {
       return;
     }
 
-    _player.targetLocation = targetPoint;
+    player.targetLocation = targetPoint;
   }
 }

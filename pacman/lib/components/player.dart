@@ -17,7 +17,7 @@ class Player extends SpriteComponent {
 
   Player(game) {
     this._game = game;
-    this._position = Point(2.0, 1.0); // starting position
+    this._position = Point(7.0, 8.0); // starting position
     sprite = Sprite('pacman.png');
     pacmanRect = Rect.fromLTWH(
         game.tileWidth * _position.x,

@@ -8,10 +8,10 @@ class PacMan extends BaseGame
     with VerticalDragDetector, HorizontalDragDetector {
   Size screenSize;
   final gameColumns = 15;
-  final gameRows = 11;
+  final gameRows = 17;
   double tileWidth, tileHeight;
 
-  TileMap _tileMap;
+  TileMap tileMap;
 
   PacMan() {
     initialize();
@@ -19,12 +19,12 @@ class PacMan extends BaseGame
 
   void initialize() async {
     resize(await Flame.util.initialDimensions());
-    _tileMap = TileMap(this);
+    tileMap = TileMap(this);
   }
 
   @override
   void update(double t) {
-    if (_tileMap != null) _tileMap.update(t);
+    if (tileMap != null) tileMap.update(t);
 
     super.update(t);
   }
@@ -35,7 +35,7 @@ class PacMan extends BaseGame
       return;
     }
 
-    if (_tileMap != null) _tileMap.render(canvas);
+    if (tileMap != null) tileMap.render(canvas);
 
     super.render(canvas);
   }
@@ -57,9 +57,9 @@ class PacMan extends BaseGame
   void onVerticalDragEnd(DragEndDetails details) {
     double velocity = details.primaryVelocity;
     if (velocity < 0) {
-      _tileMap.managePlayerMovement('DOWN');
+      tileMap.managePlayerMovement('DOWN');
     } else {
-      _tileMap.managePlayerMovement('UP');
+      tileMap.managePlayerMovement('UP');
     }
   }
 
@@ -67,9 +67,9 @@ class PacMan extends BaseGame
   void onHorizontalDragEnd(DragEndDetails details) {
     double velocity = details.primaryVelocity;
     if (velocity < 0) {
-      _tileMap.managePlayerMovement('LEFT');
+      tileMap.managePlayerMovement('LEFT');
     } else {
-      _tileMap.managePlayerMovement('RIGHT');
+      tileMap.managePlayerMovement('RIGHT');
     }
   }
 }
